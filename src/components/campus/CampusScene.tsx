@@ -1,8 +1,8 @@
 "use client";
 
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Stars, Sparkles } from "@react-three/drei";
-import { Suspense } from "react";
+import { OrbitControls, Stars, Sparkles, useGLTF } from "@react-three/drei";
+import { Suspense, useMemo } from "react";
 import * as THREE from "three";
 
 export type CampusPlace = { id:string; name:string; subtitle:string; color:string; position:[number,number,number]; route:string };
@@ -31,35 +31,32 @@ function BuildingWindow({x,y,z}:{x:number;y:number;z:number}) {
   </group>;
 }
 
+const UNIVERSITY_GLB = "https://grab3d.com/dl/university-building/university-building.glb";
+const LIBRARY_GLB = "https://grab3d.com/dl/library/library.glb";
+
 function Building({place,onSelect,active,index}:{place:CampusPlace;onSelect:(place:CampusPlace)=>void;active:boolean;index:number}) {
-  const width = index===1 ? 2.65 : 2.4;
-  const height = index===2 ? 1.75 : 2.05;
-  const rotation = [Math.PI/2,0,-Math.PI/2,Math.PI][index];
-  return <group position={place.position} rotation={[0,rotation,0]} onClick={event=>{event.stopPropagation();onSelect(place);}}>
-    <mesh position={[0,height/2,0]} castShadow receiveShadow>
-      <boxGeometry args={[width,height,1.9]}/>
-      <meshStandardMaterial color={active?"#f0e8f6":"#d8d1e4"} roughness={.58} metalness={.08}/>
+  const {scene} = useGLTF(index===1 ? LIBRARY_GLB : UNIVERSITY_GLB);
+  const model = useMemo(() => {
+    const clone = scene.clone(true);
+    const bounds = new THREE.Box3().setFromObject(clone);
+    const size = bounds.getSize(new THREE.Vector3());
+    const center = bounds.getCenter(new THREE.Vector3());
+    clone.position.set(-center.x,-bounds.min.y,-center.z);
+    clone.traverse(object => {
+      if (object instanceof THREE.Mesh) {
+        object.castShadow = true;
+        object.receiveShadow = true;
+      }
+    });
+    return {scene:clone,scale:3.5/Math.max(size.y,0.001)};
+  },[scene]);
+  return <group position={place.position} onClick={event=>{event.stopPropagation();onSelect(place);}}>
+    <primitive object={model.scene} scale={model.scale}/>
+    <mesh position={[0,.045,0]}>
+      <cylinderGeometry args={[2.25,2.35,.12,32]}/>
+      <meshStandardMaterial color={active?place.color:"#9d91ae"} emissive={place.color} emissiveIntensity={active ? .2 : .035} roughness={.72}/>
     </mesh>
-    <mesh position={[0,height+.08,0]} castShadow>
-      <boxGeometry args={[width+.28,.18,2.08]}/>
-      <meshStandardMaterial color={place.color} roughness={.38} metalness={.22} emissive={place.color} emissiveIntensity={active ? .28 : .08}/>
-    </mesh>
-    <mesh position={[0,height+.32,0]} castShadow>
-      <boxGeometry args={[width*.76,.42,1.52]}/>
-      <meshStandardMaterial color="#827694" roughness={.5}/>
-    </mesh>
-    <mesh position={[0,height+.58,0]}>
-      <coneGeometry args={[.92,.42,4]}/>
-      <meshStandardMaterial color={place.color} roughness={.42} metalness={.2}/>
-    </mesh>
-    {windowXs.map(x=><BuildingWindow key={"a"+x} x={x} y={.95} z={.978}/>)}
-    {windowXs.map(x=><BuildingWindow key={"b"+x} x={x} y={1.55} z={.978}/>)}
-    <mesh position={[0,.57,1.0]}><boxGeometry args={[.52,1.12,.09]}/><meshStandardMaterial color="#4a4163"/></mesh>
-    <mesh position={[0,.1,1.2]}><boxGeometry args={[1.18,.2,.58]}/><meshStandardMaterial color="#c2b7cf"/></mesh>
-    <mesh position={[0,.23,1.08]}><boxGeometry args={[.88,.16,.28]}/><meshStandardMaterial color="#f1e8f2"/></mesh>
-    {[-1,1].map(side=><mesh key={side} position={[side*(width/2+.02),.8,0]}><boxGeometry args={[.12,1.5,1.72]}/><meshStandardMaterial color="#b7accb" roughness={.6}/></mesh>)}
-    <mesh position={[0,.055,0]}><boxGeometry args={[width+.52,.12,2.42]}/><meshStandardMaterial color={active?place.color:"#8e83a9"} emissive={place.color} emissiveIntensity={active ? .25 : .04}/></mesh>
-    <mesh position={[0,height+.84,0]}><boxGeometry args={[.72,.08,.72]}/><meshStandardMaterial color="#d9c9e9" metalness={.25}/></mesh>
+    {active && <mesh position={[0,.08,0]}><ringGeometry args={[2.32,2.4,64]}/><meshBasicMaterial color={place.color} transparent opacity={.8} side={THREE.DoubleSide}/></mesh>}
   </group>;
 }
 
