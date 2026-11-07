@@ -96,13 +96,13 @@ function World({onSelect,selectedId}:{onSelect:(place:CampusPlace)=>void;selecte
     {gardens.map((p,i)=><GardenBed key={i} position={p}/>)}
     {trees.map((p,i)=><Tree key={i} position={p} scale={.78+(i%3)*.1}/>)}
     {places.map((place,index)=><Building key={place.id} place={place} index={index} onSelect={onSelect} active={selectedId===place.id}/>)}
-    <OrbitControls enablePan={false} minDistance={12} maxDistance={20} minPolarAngle={.58} maxPolarAngle={1.28} autoRotate autoRotateSpeed={.1} enableDamping dampingFactor={.08}/>
+    <OrbitControls enablePan={false} minDistance={14} maxDistance={28} minPolarAngle={.58} maxPolarAngle={1.28} autoRotate autoRotateSpeed={.1} enableDamping dampingFactor={.08}/>
   </>;
 }
 
 export default function CampusScene({onSelect,selectedId}:{onSelect:(place:CampusPlace)=>void;selectedId:string|null}) {
   return <div className="h-full w-full">
-    <Canvas camera={{position:[12,11,14],fov:34}} dpr={[1,1.2]} gl={{antialias:false,powerPreference:"high-performance"}} onCreated={({gl})=>{gl.setClearColor("#0b0a19");}}>
+    <Canvas camera={{position:[15,14,17],fov:43}} dpr={[1,1.2]} gl={{antialias:false,powerPreference:"high-performance"}} onCreated={({gl})=>{gl.setClearColor("#0b0a19");}}>
       <Suspense fallback={null}><World onSelect={onSelect} selectedId={selectedId}/></Suspense>
     </Canvas>
   </div>;
