@@ -29,8 +29,8 @@ const trees:[number,number,number][]=[[-6,0,-4],[-6,0,4],[6,0,-4],[6,0,4],[-4,0,
 return <>
 <color attach="background" args={["#0b0920"]}/><fog attach="fog" args={["#0b0920",16,36]}/>
 <ambientLight intensity={1.15}/><directionalLight position={[5,9,6]} intensity={2.3} castShadow/><pointLight position={[-5,4,-4]} color="#b58cff" intensity={24} distance={18}/><pointLight position={[5,3,4]} color="#f18ed7" intensity={18} distance={14}/>
-<Stars radius={80} depth={35} count={1400} factor={2.2} fade speed={.5}/><Sparkles count={120} scale={[15,5,15]} size={2} speed={.25} color="#d6b8ff"/>
-<mesh rotation={[-Math.PI/2,0,0]} position={[0,-.55,0]} receiveShadow><cylinderGeometry args={[8.2,8.7,1.15,72]}/><meshStandardMaterial color="#292447" roughness={.8} metalness={.12}/></mesh>
+<Stars radius={70} depth={30} count={650} factor={1.8} fade speed={.25}/><Sparkles count={55} scale={[14,3,14]} size={1.5} speed={.15} color="#d6b8ff"/>
+<mesh position={[0,-.55,0]} receiveShadow><cylinderGeometry args={[8.2,8.7,1.15,96]}/><meshStandardMaterial color="#292447" roughness={.8} metalness={.12}/></mesh>
 <mesh rotation={[-Math.PI/2,0,0]} position={[0,.035,0]}><ringGeometry args={[5.1,5.22,96]}/><meshBasicMaterial color="#b58cff" transparent opacity={.72} side={THREE.DoubleSide}/></mesh>
 {[0,1,2].map(i=><mesh key={i} rotation={[-Math.PI/2,0,0]} position={[0,.045+i*.002,0]}><ringGeometry args={[2.5+i*.65,2.53+i*.65,96]}/><meshBasicMaterial color={i===1?"#e9a2e8":"#8e83c8"} transparent opacity={.35}/></mesh>)}
 <mesh position={[0,.04,0]}><cylinderGeometry args={[2,2.3,.18,48]}/><meshStandardMaterial color="#65548d" metalness={.35} roughness={.42}/></mesh>
@@ -41,5 +41,5 @@ return <>
 </>;
 }
 export default function CampusScene({onSelect,selectedId}:{onSelect:(place:CampusPlace)=>void;selectedId:string|null}){
-return <div className="h-full w-full"><Canvas camera={{position:[10,9,12],fov:38}} shadows dpr={[1,1.6]}><Suspense fallback={null}><World onSelect={onSelect} selectedId={selectedId}/></Suspense></Canvas></div>;
+return <div className="h-full w-full"><Canvas camera={{position:[11,10,13],fov:36}} dpr={[1,1.25]} gl={{antialias:false,powerPreference:"high-performance"}}><Suspense fallback={null}><World onSelect={onSelect} selectedId={selectedId}/></Suspense></Canvas></div>;
 }
