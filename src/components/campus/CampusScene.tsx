@@ -46,6 +46,10 @@ return <>
 <mesh position={[0,-.58,0]} receiveShadow><cylinderGeometry args={[8.4,8.8,1.15,96]}/><meshStandardMaterial color="#333047" roughness={.92}/></mesh>
 <mesh rotation={[-Math.PI/2,0,0]} position={[0,.012,0]}><circleGeometry args={[8.35,96]}/><meshStandardMaterial color="#777184" roughness={.95}/></mesh>
 <mesh rotation={[-Math.PI/2,0,0]} position={[0,.025,0]}><ringGeometry args={[5.2,5.42,96]}/><meshStandardMaterial color="#c0a8d6" roughness={.8}/></mesh>
+<mesh position={[-2.85,.045,0]}><boxGeometry args={[2.15,.055,.82]}/><meshStandardMaterial color="#aaa2b8" roughness={.9}/></mesh>
+<mesh position={[2.85,.045,0]}><boxGeometry args={[2.15,.055,.82]}/><meshStandardMaterial color="#aaa2b8" roughness={.9}/></mesh>
+<mesh position={[0,.045,-2.85]}><boxGeometry args={[.82,.055,2.15]}/><meshStandardMaterial color="#aaa2b8" roughness={.9}/></mesh>
+<mesh position={[0,.045,2.85]}><boxGeometry args={[.82,.055,2.15]}/><meshStandardMaterial color="#aaa2b8" roughness={.9}/></mesh>
 <mesh rotation={[-Math.PI/2,0,0]} position={[0,.035,0]}><ringGeometry args={[2.05,2.2,64]}/><meshBasicMaterial color="#e2b5df" transparent opacity={.75} side={THREE.DoubleSide}/></mesh>
 <mesh position={[0,.16,0]}><cylinderGeometry args={[1.25,1.4,.28,32]}/><meshStandardMaterial color="#81769c" metalness={.22} roughness={.4}/></mesh>
 <mesh position={[0,.48,0]}><cylinderGeometry args={[.9,.9,.38,32]}/><meshStandardMaterial color="#b8a6d1" metalness={.25} roughness={.25}/></mesh>
