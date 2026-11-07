@@ -2,7 +2,7 @@
 
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Stars, Sparkles, useGLTF } from "@react-three/drei";
-import { Suspense, useMemo } from "react";
+import { Component, Suspense, useMemo, type ReactNode } from "react";
 import * as THREE from "three";
 
 export type CampusPlace = { id:string; name:string; subtitle:string; color:string; position:[number,number,number]; route:string };
@@ -33,6 +33,24 @@ function BuildingWindow({x,y,z}:{x:number;y:number;z:number}) {
 
 const UNIVERSITY_GLB = "https://grab3d.com/dl/university-building/university-building.glb";
 const LIBRARY_GLB = "https://grab3d.com/dl/library/library.glb";
+
+
+function ProceduralFallback({place,onSelect,active}:{place:CampusPlace;onSelect:(place:CampusPlace)=>void;active:boolean}) {
+  return <group position={place.position} onClick={event=>{event.stopPropagation();onSelect(place);}}>
+    <mesh position={[0,1,0]} castShadow><boxGeometry args={[2.25,2,1.85]}/><meshStandardMaterial color={active ? "#eee5ff" : "#d4cce5"} roughness={.55}/></mesh>
+    <mesh position={[0,2.08,0]}><boxGeometry args={[2.5,.16,2.08]}/><meshStandardMaterial color={place.color} emissive={place.color} emissiveIntensity={.18}/></mesh>
+    <mesh position={[0,2.35,0]}><coneGeometry args={[.82,.48,4]}/><meshStandardMaterial color={place.color}/></mesh>
+    {[-.72,-.24,.24,.72].map(x=><mesh key={x} position={[x,1.05,.94]}><boxGeometry args={[.22,.4,.05]}/><meshStandardMaterial color="#9edce6" emissive="#70c9d8" emissiveIntensity={.35}/></mesh>)}
+    <mesh position={[0,.55,.96]}><boxGeometry args={[.46,1.08,.08]}/><meshStandardMaterial color="#493e65"/></mesh>
+  </group>;
+}
+type BoundaryState = { failed:boolean };
+class ModelErrorBoundary extends Component<{fallback:ReactNode;children:ReactNode},BoundaryState> {
+  state:BoundaryState = {failed:false};
+  static getDerivedStateFromError():BoundaryState { return {failed:true}; }
+  componentDidCatch(error:Error) { console.warn("Campus GLB failed; using procedural fallback.",error); }
+  render() { return this.state.failed ? this.props.fallback : this.props.children; }
+}
 
 function Building({place,onSelect,active,index}:{place:CampusPlace;onSelect:(place:CampusPlace)=>void;active:boolean;index:number}) {
   const {scene} = useGLTF(index===1 ? LIBRARY_GLB : UNIVERSITY_GLB);
@@ -92,7 +110,11 @@ function World({onSelect,selectedId}:{onSelect:(place:CampusPlace)=>void;selecte
     <mesh rotation={[-Math.PI/2,0,0]} position={[0,.04,0]}><ringGeometry args={[2.3,2.34,64]}/><meshBasicMaterial color="#bba6d5" transparent opacity={.6}/></mesh>
     {gardens.map((p,i)=><GardenBed key={i} position={p}/>)}
     {trees.map((p,i)=><Tree key={i} position={p} scale={.78+(i%3)*.1}/>)}
-    {places.map((place,index)=><Building key={place.id} place={place} index={index} onSelect={onSelect} active={selectedId===place.id}/>)}
+    {places.map((place,index)=><ModelErrorBoundary key={place.id} fallback={<ProceduralFallback place={place} onSelect={onSelect} active={selectedId===place.id}/>}>
+      <Suspense fallback={<ProceduralFallback place={place} onSelect={onSelect} active={selectedId===place.id}/>}>
+        <Building place={place} index={index} onSelect={onSelect} active={selectedId===place.id}/>
+      </Suspense>
+    </ModelErrorBoundary>)}
     <OrbitControls enablePan={false} minDistance={14} maxDistance={28} minPolarAngle={.58} maxPolarAngle={1.28} autoRotate autoRotateSpeed={.1} enableDamping dampingFactor={.08}/>
   </>;
 }
