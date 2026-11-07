@@ -26,7 +26,7 @@ const width=index===1?2.15:2.35;
 const height=index===2?1.65:2.05;
 return <group position={place.position} onClick={event=>{event.stopPropagation();onSelect(place);}}>
 <mesh position={[0,height/2,0]} castShadow receiveShadow><boxGeometry args={[width,height,1.85]}/><meshStandardMaterial color={active?"#eee5ff":"#d4cce5"} roughness={.55} metalness={.08}/></mesh>
-<mesh position={[0,height+.08,0]} castShadow><boxGeometry args={[width+.24,.16,2.02]}/><meshStandardMaterial color={place.color} roughness={.38} metalness={.25} emissive={place.color} emissiveIntensity={active?.24:.08}/></mesh>
+<mesh position={[0,height+.08,0]} castShadow><boxGeometry args={[width+.24,.16,2.02]}/><meshStandardMaterial color={place.color} roughness={.38} metalness={.25} emissive={place.color} emissiveIntensity={active ? .24 : .08}/></mesh>
 <mesh position={[0,height+.34,0]} castShadow><boxGeometry args={[width*.7,.42,1.45]}/><meshStandardMaterial color={index===1?"#665c84":"#7d7197"} roughness={.45}/></mesh>
 <mesh position={[0,height+.58,0]}><coneGeometry args={[.9,.42,4]}/><meshStandardMaterial color={place.color} roughness={.42} metalness={.18}/></mesh>
 {[-.78,-.26,.26,.78].map(x=><Window key={x} position={[x,.98,.955]}/>)}
@@ -34,7 +34,7 @@ return <group position={place.position} onClick={event=>{event.stopPropagation()
 <mesh position={[0,.55,.96]}><boxGeometry args={[.48,1.08,.08]}/><meshStandardMaterial color="#493e65"/></mesh>
 <mesh position={[0,.1,1.16]}><boxGeometry args={[1.15,.2,.58]}/><meshStandardMaterial color="#b9afc9"/></mesh>
 <mesh position={[0,.22,1.04]}><boxGeometry args={[.85,.16,.28]}/><meshStandardMaterial color="#e9dfef"/></mesh>
-<mesh position={[0,.055,0]}><boxGeometry args={[width+.5,.11,2.35]}/><meshStandardMaterial color={active?place.color:"#8e83a9"} emissive={place.color} emissiveIntensity={active?.25:.04}/></mesh>
+<mesh position={[0,.055,0]}><boxGeometry args={[width+.5,.11,2.35]}/><meshStandardMaterial color={active?place.color:"#8e83a9"} emissive={place.color} emissiveIntensity={active ? .25 : .04}/></mesh>
 </group>;
 }
 function World({onSelect,selectedId}:{onSelect:(place:CampusPlace)=>void;selectedId:string|null}){
