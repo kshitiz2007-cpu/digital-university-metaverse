@@ -17,11 +17,11 @@ return <group position={position} scale={scale}><mesh position={[0,.35,0]} castS
 function Building({place,onSelect,active}:{place:CampusPlace;onSelect:(place:CampusPlace)=>void;active:boolean}){
 return <Float speed={1.1} rotationIntensity={.025} floatIntensity={.08}><group position={place.position} onClick={event=>{event.stopPropagation();onSelect(place);}}>
 <mesh position={[0,.52,0]} castShadow receiveShadow><cylinderGeometry args={[.92,1.12,1.05,8]}/><meshStandardMaterial color={active?"#f2d9ff":"#c3b6df"} metalness={.34} roughness={.32}/></mesh>
-<mesh position={[0,1.2,0]} castShadow><coneGeometry args={[.78,.8,8]}/><meshStandardMaterial color={place.color} emissive={place.color} emissiveIntensity={active?.55:.2} metalness={.24} roughness={.28}/></mesh>
+<mesh position={[0,1.2,0]} castShadow><coneGeometry args={[.78,.8,8]}/><meshStandardMaterial color={place.color} emissive={place.color} emissiveIntensity={active ? .55 : .2} metalness={.24} roughness={.28}/></mesh>
 <mesh position={[0,.48,.57]}><boxGeometry args={[.24,.48,.04]}/><meshStandardMaterial color="#24213b"/></mesh>
 {[-.48,-.16,.16,.48].map(x=><mesh key={x} position={[x,.72,.61]}><boxGeometry args={[.1,.16,.025]}/><meshBasicMaterial color="#ffe8b2"/></mesh>)}
 <mesh position={[0,1.65,0]}><sphereGeometry args={[.13,16,16]}/><meshBasicMaterial color={place.color}/></mesh>
-<mesh position={[0,.04,0]}><cylinderGeometry args={[1.3,1.3,.12,32]}/><meshStandardMaterial color={active?place.color:"#6c5d92"} emissive={place.color} emissiveIntensity={active?.3:.06}/></mesh>
+<mesh position={[0,.04,0]}><cylinderGeometry args={[1.3,1.3,.12,32]}/><meshStandardMaterial color={active?place.color:"#6c5d92"} emissive={place.color} emissiveIntensity={active ? .3 : .06}/></mesh>
 </group></Float>;
 }
 function World({onSelect,selectedId}:{onSelect:(place:CampusPlace)=>void;selectedId:string|null}){
