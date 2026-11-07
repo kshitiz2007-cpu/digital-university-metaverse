@@ -1,0 +1,21 @@
+import Link from "next/link";
+import { ArrowLeft, ArrowRight, BookOpen, BrainCircuit, CalendarDays, ClipboardCheck, GraduationCap, MonitorPlay, Sparkles, Trophy, Users } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+
+const spaces: Record<string, { title: string; eyebrow: string; description: string; icon: LucideIcon; items: string[] }> = {
+  academy: { title: "Main Academy", eyebrow: "YOUR LEARNING HOME", description: "A clear view of the paths, subjects and milestones that shape your learning journey.", icon: GraduationCap, items: ["My learning path", "Course catalogue", "Weekly study plan"] },
+  study: { title: "Study Hall", eyebrow: "FOCUSED LEARNING", description: "Enter a subject, follow a structured syllabus and build understanding topic by topic.", icon: BookOpen, items: ["Polity & Governance", "Economy", "History & Culture", "Geography", "Environment"] },
+  classes: { title: "Lecture Theatre", eyebrow: "LEARN TOGETHER", description: "A dedicated space for live sessions, recorded lectures and classroom resources.", icon: MonitorPlay, items: ["Upcoming live sessions", "Recorded lectures", "Class resources"] },
+  exams: { title: "Examination Centre", eyebrow: "PRACTICE WITH PURPOSE", description: "Test your understanding through daily drills, sectional quizzes and full-length mock tests.", icon: ClipboardCheck, items: ["Daily Drill", "Subject quizzes", "Full-length mock tests"] },
+  "ai-tutor": { title: "AI Research Lab", eyebrow: "THINK DEEPER", description: "An intelligent study companion for concept exploration, revision and doubt clarification.", icon: BrainCircuit, items: ["Ask a concept question", "Explain a difficult topic", "Create a revision plan"] },
+  editorials: { title: "Editorial Pavilion", eyebrow: "IDEAS OF THE DAY", description: "Connect important developments with the deeper themes of the civil services syllabus.", icon: CalendarDays, items: ["Daily editorial", "Prelims pointers", "Mains analytical angle"] },
+  achievements: { title: "Achievement Tower", eyebrow: "YOUR PROGRESS", description: "A personal space for milestones, learning consistency and completed goals.", icon: Trophy, items: ["Learning milestones", "Practice history", "Study consistency"] },
+  community: { title: "Community Plaza", eyebrow: "LEARN TOGETHER", description: "A future-ready space for academic discussions, announcements and peer learning.", icon: Users, items: ["Discussion rooms", "Announcements", "Peer study circles"] },
+};
+
+export default async function LearningSpacePage({ params }: { params: Promise<{ space: string }> }) {
+  const { space } = await params;
+  const data = spaces[space] ?? spaces.academy;
+  const Icon = data.icon;
+  return <main className="min-h-screen px-5 py-7 md:px-12"><header className="flex items-center justify-between"><Link href="/" className="flex items-center gap-2 text-xs text-white/60 hover:text-white"><ArrowLeft size={15}/> Back to campus</Link><div className="text-[10px] tracking-[.2em] text-violet-200">DIGITAL UNIVERSITY</div></header><section className="mx-auto max-w-5xl pt-16"><div className="glass inline-flex h-14 w-14 items-center justify-center rounded-2xl text-violet-200"><Icon size={25}/></div><div className="mt-8 text-[10px] tracking-[.24em] text-violet-200">{data.eyebrow}</div><h1 className="display mt-3 text-4xl font-semibold md:text-6xl">{data.title}</h1><p className="mt-4 max-w-2xl text-sm leading-7 text-white/55">{data.description}</p><div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{data.items.map((item, i) => <div key={item} className="glass rounded-3xl p-6"><div className="text-[10px] tracking-[.18em] text-violet-200">SPACE 0{i+1}</div><h2 className="mt-5 text-lg font-semibold">{item}</h2><p className="mt-2 text-xs leading-5 text-white/45">This learning space is part of the new platform foundation. Its data-backed workflow will be implemented in the next development phase.</p><div className="mt-6 flex items-center gap-2 text-xs text-white/50"><Sparkles size={13}/> Coming into focus</div></div>)}</div><Link href="/library" className="mt-10 inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-3 text-xs hover:bg-white/10">Explore the library <ArrowRight size={14}/></Link></section></main>;
+}
